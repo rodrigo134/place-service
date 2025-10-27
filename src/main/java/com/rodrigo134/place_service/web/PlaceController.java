@@ -1,6 +1,8 @@
 package com.rodrigo134.place_service.web;
 
 
+import com.rodrigo134.place_service.api.PlaceRequest;
+import com.rodrigo134.place_service.api.PlaceResponse;
 import com.rodrigo134.place_service.domain.Place;
 import com.rodrigo134.place_service.domain.PlaceService;
 import org.springframework.http.HttpStatus;
@@ -22,8 +24,9 @@ public class PlaceController {
     }
 
     @PostMapping
-    public ResponseEntity<Mono<Place>> create(@RequestBody Place place) {
-        var createdPlace = placeService.create(place);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdPlace);
+    public ResponseEntity<Mono<PlaceResponse>> create(@RequestBody PlaceRequest placeRequest) {
+        var placeResponse = placeService.create(placeRequest).map(PlaceMapper::fromPlaceToResponse);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(placeResponse);
     }
 }
