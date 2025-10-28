@@ -1,5 +1,6 @@
 package com.rodrigo134.place_service.config;
 
+import com.github.slugify.Slugify;
 import com.rodrigo134.place_service.domain.PlaceRepository;
 import com.rodrigo134.place_service.domain.PlaceService;
 import org.springframework.context.annotation.Bean;
@@ -12,8 +13,17 @@ public class PlaceConfig {
 
 
     @Bean
-    PlaceService placeService(PlaceRepository placeRepository) {
-        return new PlaceService( placeRepository);
+    public Slugify slugify() {
+        return Slugify.builder()
+                .underscoreSeparator(true)
+                .lowerCase(true)
+                .build();
     }
 
+    @Bean
+    PlaceService placeService(PlaceRepository placeRepository, Slugify slugify) {
+        return new PlaceService(placeRepository, slugify);
+    }
 }
+
+
